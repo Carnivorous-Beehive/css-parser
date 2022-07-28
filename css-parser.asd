@@ -2,7 +2,8 @@
   :version "0.1.0"
   :author "Evan Duncan"
   :license "LGPL 3.0 or later"
-  :depends-on ("esrap")
+  :depends-on ("esrap"
+               "str")
   :components ((:module "src"
                 :components
                 ((:file "main"))))
@@ -16,6 +17,7 @@
                "rove")
   :components ((:module "tests"
                 :components
-                ((:file "main"))))
+                ((:file "tokenizer")
+                 (:file "main"))))
   :description "Test system for css-parser"
   :perform (test-op (op c) (symbol-call :rove :run c)))
