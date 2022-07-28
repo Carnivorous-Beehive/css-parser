@@ -6,7 +6,8 @@
                "str")
   :components ((:module "src"
                 :components
-                ((:file "main"))))
+                ((:file "main")
+                 (:file "tokenizer"))))
   :description ""
   :in-order-to ((test-op (test-op "css-parser/tests"))))
 
@@ -14,7 +15,8 @@
   :author "Evan Duncan"
   :license "LGPL 3.0 or later"
   :depends-on ("css-parser"
-               "rove")
+               "rove"
+               "esrap")
   :components ((:module "tests"
                 :components
                 ((:file "tokenizer")
