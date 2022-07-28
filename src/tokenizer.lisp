@@ -33,12 +33,13 @@
 
 (defrule at-keyword-token (and #\@ ident-token))
 
+(defrule string-boundary (or #\" #\'))
 (defrule string-token
-    (and (or #\" #\')
+    (and string-boundary
          (+ (or (not #\" #\\ newline)
                 escape
                 (and #\\ newlilne)))
-         (or #\" #\')))
+         string-boundary)
 
 (parse 'comment "/* yo dawg */ this is outside" :junk-allowed t)
 (parse 'hex-digit "c")
