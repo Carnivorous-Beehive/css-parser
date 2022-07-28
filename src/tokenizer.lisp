@@ -16,9 +16,17 @@
            #:<dimension-token>
            #:<percentage-token>
            #:<CDO-token>
-           #:<CDC-token>))
+           #:<CDC-token>
+           #:<colon-token>
+           #:<semicolon-token>
+           #:<comma-token>
+           #:<[-token>
+           #:<]-token>
+           #:<\(-token>
+           #:<\)-token>
+           #:<{-token>
+           #:<}-token>))
 (in-package :css-parser.tokenizer)
-
 
 (defun one-to-six-chars (s)
   (<= 1 (length s) 6))
