@@ -6,8 +6,9 @@
                "str")
   :components ((:module "src"
                 :components
-                ((:file "main")
-                 (:file "tokenizer"))))
+                ((:file "parser" :depends-on ("tokenizer"))
+                 (:file "tokenizer")
+                 (:file "main"))))
   :description ""
   :in-order-to ((test-op (test-op "css-parser/tests"))))
 
