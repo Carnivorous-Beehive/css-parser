@@ -25,9 +25,6 @@
 
 (defrule ws* (? (+ whitespace-token)))
 
-(defun string-encodablep (string encoding)
-  (every (lambda (c) (typep c encoding)) string))
-
 ;; TODO This needs a ton of work @see https://www.w3.org/TR/css-syntax-3/#ident-token-diagram
 (defrule ident-token
   (and (or (character-ranges (#\a #\z #\_)) (not (ascii-p character)))))
