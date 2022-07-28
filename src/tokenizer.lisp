@@ -92,3 +92,13 @@
 
 (defrule <CDO-token> (and #\< #\! #\- #\-))
 (defrule <CDC-token> (and #\- #\- #\>))
+
+(defrule <colon-token> #\:)
+(defrule <semicolon-token> #\;)
+(defrule <comma-token> #\,)
+(defrule <[-token> #\[)
+(defrule <]-token> #\])
+(defrule <\(-token> #\()
+(defrule <\)-token> #\))
+(defrule <{-token> #\{)
+(defrule <}-token> #\})
