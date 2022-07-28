@@ -39,7 +39,7 @@
          (+ (or (not #\" #\\ newline)
                 escape
                 (and #\\ newlilne)))
-         string-boundary)
+         string-boundary))
 
 (parse 'comment "/* yo dawg */ this is outside" :junk-allowed t)
 (parse 'hex-digit "c")
