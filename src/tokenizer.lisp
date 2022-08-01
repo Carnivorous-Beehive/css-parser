@@ -1,5 +1,7 @@
 (defpackage css-parser.tokenizer
-  (:use :cl :esrap :str)
+  (:use :cl :esrap)
+  (:import-from :str
+                :ascii-p)
   (:export #:comment
            #:newline
            #:whitespace
@@ -45,7 +47,7 @@
 
 (defrule escape
     (and #\\ (or (not (or newline hex-digit))
-                 (and (one-to-six-chars (+ hex-digit)) (esrap:? whitespace)))))
+                 (and (one-to-six-chars (+ hex-digit)) (? whitespace)))))
 
 (defrule <whitespace-token> (+ whitespace))
 
@@ -53,15 +55,16 @@
 
 (defrule <ident-token>
     (and (or (and #\- #\-)
-             (and (esrap:? #\-)
+             (and (? #\-)
                   (or (or (character-ranges (#\a #\z) (#\A #\Z))
                           #\_
                           (not (ascii-p character)))
                       escape)))
-         (esrap:? (or (or (character-ranges (#\a #\z) (#\A #\Z))
-                          #\-
-                          #\_)
-                      (or (esrap:? escape))))))
+         (? (or (+ (or (or (character-ranges (#\a #\z) (#\A #\Z) (#\0 #\9))
+                           #\_
+                           #\-
+                           (not (ascii-p character)))
+                       escape))))))
 
 (defrule <function-token> (and <ident-token> #\())
 
@@ -72,7 +75,7 @@
           (or (or (character-ranges (#\a #\z) (#\A #\Z))
                   #\-
                   #\_)
-              (esrap:? escape))))
+              (? escape))))
 
 (defrule string-boundary (or #\" #\'))
 (defrule <string-token>
@@ -87,14 +90,14 @@
          "url"
          #\(
          ws*
-         (esrap:? (or (not (or string-boundary #\( #\) #\\ whitespace))
-                     (esrap:? escape)))
+         (? (or (not (or string-boundary #\( #\) #\\ whitespace))
+                     (? escape)))
          ws*
          #\)))
 
 (defrule <number-token> (+ (numberp character)))
 
-(defrule <dimension-token (and <number-token> <ident-token>))
+(defrule <dimension-token> (and <number-token> <ident-token>))
 
 (defrule <percentage-token> (and <number-token> #\%))
 

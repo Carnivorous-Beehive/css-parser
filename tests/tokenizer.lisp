@@ -42,3 +42,18 @@
 (deftest test-ws*
   (testing "parses many <whitespace-tokens>"
     (ok (equal '((nil)) (parse 'ws* "   ")))))
+
+(deftest test-<ident-token>
+    (testing "parses identity tokens"
+             (ok (parse '<ident-token> "nono79"))
+             (ok (parse '<ident-token> "ground-level"))
+             (ok (parse '<ident-token> "-test"))
+             (ok (parse '<ident-token> "--toto"))
+             (ok (parse '<ident-token> "_internal"))
+             (ok (parse '<ident-token> "\\22 toto"))
+             (ok (parse '<ident-token> "bili\\.bob"))
+             (ok (signals (parse '<ident-token> "34rem")))
+             (ok (signals (parse '<ident-token> "-12rad")))
+             (ok (signals (parse '<ident-token> "bili.bob")))
+             (ok (signals (parse '<ident-token> "'bilibob'")))
+             (ok (signals (parse '<ident-token> "\"bilibob\"")))))
