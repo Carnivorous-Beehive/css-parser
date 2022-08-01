@@ -82,7 +82,7 @@
 (defrule string-boundary (or #\" #\'))
 (defrule <string-token>
     (and string-boundary
-         (+ (or (not (or #\" #\' #\\ newline))
+         (+ (or (not (or string-boundary #\\ newline))
                 escape
                 (and #\\ newlilne)))
          string-boundary))
