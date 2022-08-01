@@ -6,9 +6,10 @@
                "str")
   :components ((:module "src"
                 :components
-                ((:file "parser" :depends-on ("tokenizer"))
-                 (:file "tokenizer")
-                 (:file "main"))))
+                ((:file "token")
+                 (:tile "tokenizer" :depends-on ("token"))
+                 (:file "parser" :depends-on ("tokenizer"))
+                 (:file "main" :depends-on ("parser")))))
   :description ""
   :in-order-to ((test-op (test-op "css-parser/tests"))))
 
@@ -20,7 +21,8 @@
                "esrap")
   :components ((:module "tests"
                 :components
-                ((:file "tokenizer")
+                ((:file "token")
+                 (:tile "tokenizer")
                  (:file "main"))))
   :description "Test system for css-parser"
   :perform (test-op (op c) (symbol-call :rove :run c)))
