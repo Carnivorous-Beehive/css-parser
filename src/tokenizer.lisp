@@ -34,6 +34,10 @@
 (defun one-to-six-chars (s)
   (<= 1 (length s) 6))
 
+(defrule alpha (character-ranges (#\a #\z) (#\A #\Z)))
+(defrule numeric (character-ranges (#\0 #\9)))
+(defrule alphanumeric (or alpha numeric))
+
 (defrule comment-open (and #\/ #\*))
 (defrule comment-close (and #\* #\/))
 (defrule comment (and comment-open (* (not comment-close)) comment-close))
@@ -44,7 +48,7 @@
 (defrule whitespace (+ (or #\space #\tab newline))
   (:constant nil))
 
-(defrule hex-digit (character-ranges (#\a #\f) (#\0 #\9) (#\A #\F)))
+(defrule hex-digit (or numeric (character-ranges (#\a #\f) (#\A #\F))))
 
 (defrule escape
     (and #\\ (or (not (or newline hex-digit))
@@ -57,23 +61,23 @@
 (defrule <ident-token>
     (and (or (and #\- #\-)
              (and (? #\-)
-                  (or (or (character-ranges (#\a #\z) (#\A #\Z))
+                  (or (or alpha
                           #\_
                           (not (ascii-p character)))
                       escape)))
-         (? (or (+ (or (or (character-ranges (#\a #\z) (#\A #\Z) (#\0 #\9))
+         (? (or (+ (or (or alphanumeric
                            #\_
                            #\-
                            (not (ascii-p character)))
                        escape))))))
 
-(defrule <function-token> (and <ident-token> #\())
+(defrule <function-token> (and <ident-token> <\(-token>))
 
 (defrule <at-keyword-token> (and #\@ <ident-token>))
 
 (defrule <hash-token>
     (and #\#
-         (? (or (+ (or (or (character-ranges (#\a #\z) (#\A #\Z) (#\0 #\9))
+         (? (or (+ (or (or alphanumeric
                            #\_
                            #\-
                            (not (ascii-p character)))
@@ -88,16 +92,22 @@
          string-boundary))
 
 (defrule <url-token>
-    (and <ident-token>
-         "url"
-         #\(
+    (and "url"
+         <\(-token>
          ws*
-         (? (or (not (or string-boundary #\( #\) #\\ whitespace))
-                     (? escape)))
+         (? (or (+ (or (not (or <\(-token> <\)-token> #\\ whitespace))
+                       escape))))
          ws*
-         #\)))
+         <\)-token>))
 
-(defrule <number-token> (+ (numberp character)))
+(defrule <number-token>
+    (and (? (or #\+ #\-))
+         (or (and (+ numeric) #\. (+ numeric))
+             (+ numeric)
+             (and #\. (+ numeric)))
+         (? (and (or #\e #\E)
+                 (? (or #\+ #\-))
+                 (+ numeric)))))
 
 (defrule <dimension-token> (and <number-token> <ident-token>))
 
