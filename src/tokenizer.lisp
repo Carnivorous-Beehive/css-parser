@@ -11,6 +11,7 @@
            #:ws*
            #:<ident-token>
            #:<function-token>
+           #:<at-keyword-token>
            #:<hash-token>
            #:<string-token>
            #:<url-token>
@@ -71,16 +72,17 @@
 (defrule <at-keyword-token> (and #\@ <ident-token>))
 
 (defrule <hash-token>
-    (and \##
-          (or (or (character-ranges (#\a #\z) (#\A #\Z))
-                  #\-
-                  #\_)
-              (? escape))))
+    (and #\#
+         (? (or (+ (or (or (character-ranges (#\a #\z) (#\A #\Z) (#\0 #\9))
+                           #\_
+                           #\-
+                           (not (ascii-p character)))
+                       escape))))))
 
 (defrule string-boundary (or #\" #\'))
 (defrule <string-token>
     (and string-boundary
-         (+ (or (not (or #\" #\\ newline))
+         (+ (or (not (or #\" #\' #\\ newline))
                 escape
                 (and #\\ newlilne)))
          string-boundary))

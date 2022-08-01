@@ -57,3 +57,26 @@
              (ok (signals (parse '<ident-token> "bili.bob")))
              (ok (signals (parse '<ident-token> "'bilibob'")))
              (ok (signals (parse '<ident-token> "\"bilibob\"")))))
+
+(deftest test-<function-token>
+  (testing "parses function tokens"
+    (ok (parse '<function-token> "nono79("))
+    (ok (signals (parse '<function-token> "nono79")))
+    (ok (parse '<function-token> "bili\\.bob("))
+    (ok (signals (parse '<function-token> "bili.bob(")))))
+
+(deftest test-<at-keyword-token>
+  (testing "parses at keyword tokens"
+    (ok (parse '<at-keyword-token> "@nono89"))
+    (ok (signals (parse '<at-keyword-token> "@asdf@")))))
+
+(deftest test-<hash-token>
+  (testing "parses hash tokens"
+    (ok (parse '<hash-token> "#fff"))
+    (ok (signals (parse '<hash-token> "fff")))))
+
+(deftest test-<string-token>
+  (testing "parses string tokens"
+    (ok (parse '<string-token> "\"asdf\""))
+    (ok (signals (parse '<string-token> "asdf")))
+    (ok (parse '<string-token> "'asdf'"))))
